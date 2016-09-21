@@ -116,6 +116,7 @@ app.use((req, res) => {
 ```
 
 So as per above code we have to do following for server rendering
+
 1. Import MetaTagsServer and MetaTagsContext
 2. Create a new instance of MetaTagsServer
 3. Wrap your component inside MetaTagsContext and pass extract method as props
