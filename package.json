@@ -1,7 +1,7 @@
 {
   "name": "react-meta-tags",
   "description": "Handle document meta/head tags in isomorphic react with ease.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "lib/meta_tags.js",
   "author": "Sudhanshu Yadav",
   "license": "MIT",
@@ -15,12 +15,13 @@
   },
   "keywords": [
     "react-component",
+    "tags",
+    "head",
+    "meta",
+    "title",
     "react",
-    "currency",
-    "input",
-    "number",
-    "number-format",
-    "mask"
+    "base",
+    "react-meta-tags"
   ],
   "scripts": {
     "bundle": "NODE_ENV=production webpack --config webpack.bundle.config.js && npm run compile",
