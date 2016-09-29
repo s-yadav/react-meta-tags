@@ -1,7 +1,7 @@
 {
   "name": "react-meta-tags",
   "description": "Handle document meta/head tags in isomorphic react with ease.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "lib/meta_tags.js",
   "author": "Sudhanshu Yadav",
   "license": "MIT",
@@ -60,14 +60,11 @@
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-transform-hmr": "^1.0.4",
-    "webpack": "^1.12.14",
+    "webpack": "^1.13.2",
     "webpack-dev-server": "^1.14.1"
   },
   "peerDependencies": {
     "react": "^0.14 || ^15.0.0-rc || ^15.0.0",
     "react-dom": "^0.14 || ^15.0.0-rc || ^15.0.0"
-  },
-  "dependencies": {
-    "webpack": "^1.13.2"
   }
 }
