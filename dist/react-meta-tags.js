@@ -1,5 +1,5 @@
 /*!
- * react-meta-tags - 0.1.0
+ * react-meta-tags - 0.1.3
  * Author : Sudhanshu Yadav
  * Copyright (c) 2016 to Sudhanshu Yadav - ignitersworld.com , released under the MIT license.
  */
@@ -258,7 +258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      //remove title and elements from head tag having same id
 	      childNodes.forEach(function (child) {
-	        var elemInHead = head.querySelector('#', child.id);
+	        var elemInHead = !!child.id && head.querySelector('#' + child.id);
 	        if (elemInHead) {
 	          head.removeChild(elemInHead);
 	        }

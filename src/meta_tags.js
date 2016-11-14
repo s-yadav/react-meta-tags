@@ -68,7 +68,7 @@ class MetaTags extends Component {
 
     //remove title and elements from head tag having same id
     childNodes.forEach((child) => {
-      const elemInHead = head.querySelector('#', child.id);
+      const elemInHead = !!child.id && head.querySelector('#' + child.id);
       if (elemInHead) {
         head.removeChild(elemInHead);
       }
