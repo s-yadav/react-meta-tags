@@ -28,16 +28,25 @@ class MetaTags extends Component {
   static contextTypes = {
     extract: PropTypes.func
   }
+  getChildren() {
+    if(!this.props.overwrite) return this.props.children;
+
+    return React.Children.map(this.props.children, child => React.cloneElement(child, {
+        'data-source': 'react-meta-tags'
+      })
+    )
+  }
   extractChildren() {
     const {extract} = this.context;
 
     if (extract) {
-      extract(this.props.children);
+      extract(this.getChildren());
       return;
     }
   }
   handleChildrens() {
-    const {children} = this.props;
+    const {overwrite} = this.props;
+    const children = this.getChildren();
 
     if (this.context.extract){
       return;
@@ -61,26 +70,34 @@ class MetaTags extends Component {
     const head = document.head;
     const headHtml = head.innerHTML;
 
-    //filter children remove if children has not been changed
-    childNodes = childNodes.filter((child) => {
-      return headHtml.indexOf(getDomAsString(child)) === -1;
-    });
+    if(overwrite) {
+      const nodes = Array.prototype.slice.call(head.querySelectorAll('[data-source=react-meta-tags]'));
 
-    //remove title and elements from head tag having same id
-    childNodes.forEach((child) => {
-      const elemInHead = !!child.id && head.querySelector('#' + child.id);
-      if (elemInHead) {
-        head.removeChild(elemInHead);
-      }
+      nodes.forEach((node) => {
+        head.removeChild(node)
+      });
+    } else {
+      //filter children remove if children has not been changed
+      childNodes = childNodes.filter((child) => {
+        return headHtml.indexOf(getDomAsString(child)) === -1;
+      });
 
-      //remove title always
-      if(!elemInHead && child.tagName === 'TITLE'){
-        const title = head.querySelector('title');
-        if(title) {
-          head.removeChild(title);
+      //remove title and elements from head tag having same id
+      childNodes.forEach((child) => {
+        const elemInHead = !!child.id && head.querySelector('#' + child.id);
+        if (elemInHead) {
+          head.removeChild(elemInHead);
         }
-      }
-    });
+
+        //remove title always
+        if(!elemInHead && child.tagName === 'TITLE'){
+          const title = head.querySelector('title');
+          if(title) {
+            head.removeChild(title);
+          }
+        }
+      });
+    }
 
     appendChild(document.head, childNodes);
   }
