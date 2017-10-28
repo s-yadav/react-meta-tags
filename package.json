@@ -56,16 +56,15 @@
     "karma-jasmine-html-reporter": "^0.2.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
-    "react": "^15.0.1",
-    "react-addons-test-utils": "^15.0.1",
-    "react-dom": "^15.0.1",
-    "react-router": "^2.8.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-router": "^3.2.0",
     "react-transform-hmr": "^1.0.4",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.14.1"
   },
   "peerDependencies": {
-    "react": "^0.14 || ^15.0.0-rc || ^15.0.0",
-    "react-dom": "^0.14 || ^15.0.0-rc || ^15.0.0"
+    "react": "^0.14 || ^15.0.0 || ^ 16.0.0",
+    "react-dom": "^0.14 || ^15.0.0 || ^ 16.0.0"
   }
 }
