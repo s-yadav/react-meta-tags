@@ -1,7 +1,7 @@
 /*!
  * react-meta-tags - 0.1.3
  * Author : Sudhanshu Yadav
- * Copyright (c) 2016 to Sudhanshu Yadav - ignitersworld.com , released under the MIT license.
+ * Copyright (c) 2016,2017 to Sudhanshu Yadav - ignitersworld.com , released under the MIT license.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -57,14 +57,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -92,9 +92,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.MetaTagsContext = _meta_tags_context2.default;
 	exports.ReactTitle = _react_title2.default;
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -119,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function MetaTagsContext() {
 	    _classCallCheck(this, MetaTagsContext);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MetaTagsContext).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (MetaTagsContext.__proto__ || Object.getPrototypeOf(MetaTagsContext)).apply(this, arguments));
 	  }
 
 	  _createClass(MetaTagsContext, [{
@@ -142,15 +142,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	exports.default = MetaTagsContext;
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -205,7 +205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function MetaTags() {
 	    _classCallCheck(this, MetaTags);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MetaTags).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (MetaTags.__proto__ || Object.getPrototypeOf(MetaTags)).apply(this, arguments));
 	  }
 
 	  _createClass(MetaTags, [{
@@ -302,15 +302,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	exports.default = MetaTags;
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -342,7 +342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function ReactTitle() {
 	    _classCallCheck(this, ReactTitle);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ReactTitle).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (ReactTitle.__proto__ || Object.getPrototypeOf(ReactTitle)).apply(this, arguments));
 	  }
 
 	  _createClass(ReactTitle, [{
@@ -365,7 +365,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = ReactTitle;
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;
