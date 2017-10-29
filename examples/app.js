@@ -6,19 +6,19 @@ import {match, RouterContext} from 'react-router';
 import MetaTagsServer from '../src/meta_tags_server';
 import {MetaTagsContext} from '../src/index';
 
+import routes from './shared/routes';
+
 const app = express();
 
 app.use((req, res) => {
   match({
-      routes: routes, location: req.url
+      routes, location: req.url
     }, (error, redirectLocation, renderProps) => {
-
       if(error) {
         res.status(500).send(error.message);
       } else if (redirectLocation) {
         res.redirect(302, redirectLocation.pathname + redirectLocation.search)
-      }
-      else if (renderProps) {
+      } else if (renderProps) {
           let reactString;
 
           const metaTagsInstance = MetaTagsServer();
@@ -53,12 +53,18 @@ app.use((req, res) => {
             </head>
             <body>
               <div id="app">${reactString}</div>
+              <script src="http://localhost:9000/bundle.js"></script>
             </body>
           `;
 
         res.status(200).send(template)
       } else {
+        console.log('redirected');
         res.status(301).redirect('/')
       }
     });
 });
+
+app.listen(8070, function() {
+  console.log('Listening on 8070');
+})

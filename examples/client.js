@@ -7,9 +7,8 @@ import routes from './shared/routes';
 
 const dest = document.getElementById('app');
 
-
-match({ routes:patchedRoutes, history: browserHistory }, (error, redirectLocation, renderProps) => {
-  ReactDOM.render(
+match({ routes:routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
+  ReactDOM.hydrate(
       <Router {...renderProps} />
   , dest);
 })

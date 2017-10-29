@@ -4,7 +4,6 @@
     "es6": true,
   },
   "plugins": [
-    "jsx-a11y", //on react based application
     "react", //on react based application
     "import" //for es6 import
   ],
@@ -202,7 +201,7 @@
 
         // Prevent use of `accessKey`
     // https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/no-access-key.md
-    'jsx-a11y/no-access-key': 2,
+    //'jsx-a11y/no-access-key': 2,
 
     // Require <img> to have a non-empty `alt` prop, or role="presentation"
     // https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/img-uses-alt.md
