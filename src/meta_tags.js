@@ -1,28 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import {getDuplicateTitle, getDuplicateMeta, appendChild, removeChild, getDomAsString} from './utils';
 
-//function to append childrens on a parent
-function appendChild(parent, childrens) {
-
-  if (childrens.length === undefined) childrens = [childrens];
-
-  const docFrag = document.createDocumentFragment();
-
-  for (let i = 0, ln = childrens.length; i < ln; i++) {
-    docFrag.appendChild(childrens[i]);
-  }
-
-  parent.appendChild(docFrag);
-}
-
-
-//get dom as string format
-function getDomAsString(dom) {
-  const temp = document.createElement('div');
-  temp.appendChild(dom);
-  return temp.innerHTML;
-}
 
 /** An wrapper component to wrap element which need to shifted to head **/
 class MetaTags extends Component {
@@ -67,19 +47,15 @@ class MetaTags extends Component {
         return headHtml.indexOf(getDomAsString(child)) === -1;
       });
 
-      //remove title and elements from head tag having same id
+      //remove duplicate title and meta from head
       childNodes.forEach((child) => {
-        const elemInHead = !!child.id && head.querySelector('#' + child.id);
-        if (elemInHead) {
-          head.removeChild(elemInHead);
-        }
-
-        //remove title always
-        if(!elemInHead && child.tagName === 'TITLE'){
-          const title = head.querySelector('title');
-          if(title) {
-            head.removeChild(title);
-          }
+        const tag = child.tagName.toLowerCase();
+        if (tag === 'title') {
+          const title = getDuplicateTitle();
+          if (title) removeChild(head, title);
+        } else if (tag === 'meta') {
+          const meta = getDuplicateMeta(child);
+          if (meta) removeChild(head, meta);
         }
       });
 

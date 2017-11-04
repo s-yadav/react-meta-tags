@@ -7,7 +7,7 @@ class Page2 extends React.Component {
       <div className="page1">
         <MetaTags>
           <title>React Meta Tags | Page2</title>
-          <meta id="meta-description" name="description" content="This is page 2 description." />
+          <meta name="description" content="This is page 2 description." />
           <meta id="og-title" property="og:title" content="MyApp" />
         </MetaTags>
         <div>

@@ -1,7 +1,7 @@
 {
   "name": "react-meta-tags",
   "description": "Handle document meta/head tags in isomorphic react with ease.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "lib/index.js",
   "author": "Sudhanshu Yadav",
   "license": "MIT",
@@ -24,10 +24,10 @@
     "react-meta-tags"
   ],
   "scripts": {
-    "start": "nodemon example.js",
-    "start-dev": "webpack-dev-server --content-base example/ --config webpack.dev.config.js --watch-poll --progress --inline --hot",
-    "bundle": "NODE_ENV=production webpack --config webpack.bundle.config.js && npm run compile",
-    "compile": "babel src --out-dir lib"
+    "start": "cross-env nodemon example.js",
+    "start-dev": "cross-env webpack-dev-server --content-base example/ --config webpack.dev.config.js --watch-poll --progress --inline --hot",
+    "bundle": "cross-env NODE_ENV=production webpack --config webpack.bundle.config.js && npm run compile",
+    "compile": "cross-env babel src --out-dir lib"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
@@ -41,6 +41,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-register": "^6.7.2",
     "classnames": "^2.2.3",
+    "cross-env": "^3.1.4",
     "eslint": "^2.5.3",
     "eslint-config-standard": "^5.1.0",
     "eslint-loader": "^1.3.0",

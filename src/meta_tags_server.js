@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDomServer from 'react-dom/server';
+import {extractMetaAndTitle, removeDuplicateMetas} from './utils';
 
 function MetaTagsServer(){
   const headElms = [];
+
   return {
     extract: function(elms){
       headElms.push(elms);
@@ -16,7 +18,15 @@ function MetaTagsServer(){
         return $2;
       });
 
-      return componentStr;
+      const {title, metas, rest} = extractMetaAndTitle(componentStr);
+
+      const metasStr = removeDuplicateMetas(metas).map(meta => meta._tagString).join('');
+
+      return `
+        ${title}
+        ${metasStr}
+        ${rest}
+      `;
     }
   }
 }

@@ -23,9 +23,9 @@ class Component1 extends React.Component {
         <div class="wrapper">
           <MetaTags>
             <title>Page 1</title>
-            <meta id="meta-description" name="description" content="Some description." />
-            <meta id="og-title" property="og:title" content="MyApp" />
-            <meta id="og-image" property="og:image" content="path/to/image.jpg" />
+            <meta name="description" content="Some description." />
+            <meta property="og:title" content="MyApp" />
+            <meta property="og:image" content="path/to/image.jpg" />
           </MetaTags>
           <div class="content"> Some Content </div>
         </div>
@@ -122,3 +122,8 @@ So as per above code we have to do following for server rendering
 3. Wrap your component inside MetaTagsContext and pass extract method as props
 4. Extract meta string using renderToString of MetaTagsServer instance
 5. Append meta string to your html template.
+
+## Meta Tag Uniqueness
+- The module uniquely identifies meta tag by id / property / name attribute.
+- Multiple meta tags with same property / name is valid in html. If you need such case. Define a different id to both so that it can be uniquely differentiate.
+- You should give an id if meta key is different then property/name to uniquely identify them.

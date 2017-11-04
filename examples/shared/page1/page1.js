@@ -1,13 +1,22 @@
 import React from 'react';
 import MetaTags from '../../../src/index';
 
+function PageDummy() {
+  return (
+    <MetaTags>
+      <title>React Meta Tags | Page Dummy</title>
+      <meta name="description" content="Dummy description" />
+    </MetaTags>
+  )
+}
+
 class Page1 extends React.Component {
   render() {
     return (
       <div className="page1">
         <MetaTags>
           <title>React Meta Tags | Page1</title>
-          <meta id="meta-description" name="description" content="React meta tags handles document meta/head tags in isomorphic react with ease." />
+          <meta name="description" content="React meta tags handles document meta/head tags in isomorphic react with ease." />
         </MetaTags>
         <div>
           <p>
