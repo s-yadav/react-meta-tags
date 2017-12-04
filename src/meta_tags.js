@@ -56,6 +56,9 @@ class MetaTags extends Component {
         } else if (tag === 'meta') {
           const meta = getDuplicateMeta(child);
           if (meta) removeChild(head, meta);
+        } else if (tag === 'link' && child.rel === 'canonical') {
+          const link = getDuplicateMeta(child);
+          if (link) removeChild(head, link);
         }
       });
 
