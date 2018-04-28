@@ -1,4 +1,3 @@
-//to let webpack know the assetPath
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Router, match, browserHistory } from 'react-router';

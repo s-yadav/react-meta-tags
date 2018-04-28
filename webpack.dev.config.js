@@ -19,11 +19,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      // { test: /\.css$/, loaders: ['style', 'css']},
-      // { test: /\.cjsx$/, loaders: ['react-hot', 'coffee', 'cjsx']},
-      // { test: /\.coffee$/, loader: 'coffee' }
       {test: /\.js$/, loaders:['babel','eslint-loader'], exclude: /node_modules/},
-      //{ test: /\.css$/, loader: "style-loader!css-loader" },
     ]
   }
 };

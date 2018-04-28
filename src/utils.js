@@ -1,4 +1,5 @@
 const metaRegex = /<meta[^<>]*?=(['"].*?['"]|[^<>]*?)*?\/?>/g;
+const canonicalLinkRegex = /<link[^<>]*?rel=['"]canonical['"].*?(\/>|<\/link>)/g;
 const titleRegex = /<title[^<>]*?>(.*?)<\/title>/g;
 const attributesRegex = /(\S*?)=("(.*?)"|'(.*?)'|([^<>\s]*))/g;
 
@@ -27,7 +28,7 @@ function filterOutMetaWithId(metas) {
 }
 
 export function extractMetaAndTitle(domString) {
-  let title;
+  let title, canonicalLink;
   const metas = [];
 
   //extract title, only take the last title, remove title from the string
@@ -35,6 +36,14 @@ export function extractMetaAndTitle(domString) {
     title = titleStr;
     return '';
   });
+
+
+  //extract canonical
+  domString = domString.replace(canonicalLinkRegex, (canonicalLinkStr) => {
+    canonicalLink = canonicalLinkStr;
+    return '';
+  });
+
 
   //extract metas
   domString = domString.replace(metaRegex, (_tagString) => {
@@ -45,6 +54,7 @@ export function extractMetaAndTitle(domString) {
   return {
     title,
     metas,
+    canonicalLink,
     rest: domString
   }
 }
@@ -85,7 +95,11 @@ export function removeDuplicateMetas(metas) {
 }
 
 export function getDuplicateTitle() {
-  return document.head.querySelector('title');
+  return document.head.querySelectorAll('title');
+}
+
+export function getDuplicateCanonical() {
+  return document.head.querySelectorAll('link[rel="canonical"]');
 }
 
 export function getDuplicateMeta(meta) {

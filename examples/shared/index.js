@@ -11,10 +11,10 @@ class App extends React.Component {
             <nav className="clearfix">
               <ul className="nav nav-pills">
                 <li className="nav-item">
-                  <Link className="nav-link" activeClassName="active" to="page1">Page 1</Link>
+                  <Link className="nav-link" activeClassName="active" to="/page1" onCLick={()=> alert(1)}>Page 1</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" activeClassName="active" to="page2">Page 2</Link>
+                  <Link className="nav-link" activeClassName="active" to="/page2">Page 2</Link>
                 </li>
               </ul>
             </nav>

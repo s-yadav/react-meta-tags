@@ -18,13 +18,14 @@ function MetaTagsServer(){
         return $2;
       });
 
-      const {title, metas, rest} = extractMetaAndTitle(componentStr);
+      const {title = '', metas, canonicalLink = '', rest} = extractMetaAndTitle(componentStr);
 
       const metasStr = removeDuplicateMetas(metas).map(meta => meta._tagString).join('');
 
       return `
         ${title}
         ${metasStr}
+        ${canonicalLink}
         ${rest}
       `;
     }
