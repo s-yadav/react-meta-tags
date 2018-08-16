@@ -87,7 +87,7 @@ export function removeDuplicateMetas(metas) {
     if (name) metaAddedNames[name] = meta;
 
     if (addMeta) {
-      filteredMetas.push(meta);
+      filteredMetas.unshift(meta);
     }
   }
 
@@ -104,7 +104,9 @@ export function getDuplicateCanonical() {
 
 export function getDuplicateMeta(meta) {
   const head = document.head;
-  const {id, property, name} = meta;
+  const {id, name} = meta;
+  const property = meta.getAttribute('property');
+
   if (id) {
     return id && head.querySelector(`#${id}`);
   } else if (name) {

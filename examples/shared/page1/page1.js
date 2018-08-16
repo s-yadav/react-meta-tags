@@ -18,6 +18,7 @@ class Page1 extends React.Component {
           <title>React Meta Tags | Page1</title>
           <link rel="canonical" href="/page1" />
           <meta name="description" content="React meta tags handles document meta/head tags in isomorphic react with ease." />
+          <meta property="og:title" content="MyApp-Page1" />
         </MetaTags>
         <div>
           <p>

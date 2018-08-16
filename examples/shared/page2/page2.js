@@ -9,7 +9,7 @@ class Page2 extends React.Component {
           <title>React Meta Tags | Page2</title>
           <link rel="canonical" href="/page2" ></link>
           <meta name="description" content="This is page 2 description." />
-          <meta id="og-title" property="og:title" content="MyApp" />
+          <meta property="og:title" content="MyApp-page2" />
         </MetaTags>
         <div>
           <p>

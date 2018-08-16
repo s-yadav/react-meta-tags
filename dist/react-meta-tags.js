@@ -1,5 +1,5 @@
 /*!
- * react-meta-tags - 0.4.1
+ * react-meta-tags - 0.4.2
  * Author : Sudhanshu Yadav
  * Copyright (c) 2016,2018 to Sudhanshu Yadav - ignitersworld.com , released under the MIT license.
  */
@@ -2253,7 +2253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (name) metaAddedNames[name] = meta;
 
 	    if (addMeta) {
-	      filteredMetas.push(meta);
+	      filteredMetas.unshift(meta);
 	    }
 	  }
 
@@ -2271,8 +2271,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function getDuplicateMeta(meta) {
 	  var head = document.head;
 	  var id = meta.id,
-	      property = meta.property,
 	      name = meta.name;
+
+	  var property = meta.getAttribute('property');
 
 	  if (id) {
 	    return id && head.querySelector('#' + id);
