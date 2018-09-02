@@ -1,15 +1,6 @@
 import React from 'react';
 import MetaTags from '../../../src/index';
 
-function PageDummy() {
-  return (
-    <MetaTags>
-      <title>React Meta Tags | Page Dummy</title>
-      <meta name="description" content="Dummy description" />
-    </MetaTags>
-  )
-}
-
 class Page1 extends React.Component {
   render() {
     return (
@@ -19,6 +10,7 @@ class Page1 extends React.Component {
           <link rel="canonical" href="/page1" />
           <meta name="description" content="React meta tags handles document meta/head tags in isomorphic react with ease." />
           <meta property="og:title" content="MyApp-Page1" />
+          <meta itemProp="test" content="Page1" />
         </MetaTags>
         <div>
           <p>

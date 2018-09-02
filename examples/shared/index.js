@@ -11,6 +11,7 @@ class App extends React.Component {
         <link rel="canonical" href="/page1" />
         <meta name="description" content="Index page" />
         <meta property="og:title" content="MyApp" />
+        <meta itemProp="test" content="Index page" />
       </MetaTags>
         <header className="header">
           <h3 className="text-muted">React Meta Tags</h3>

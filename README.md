@@ -20,14 +20,14 @@ import MetaTags from 'react-meta-tags';
 class Component1 extends React.Component {
   render() {
     return (
-        <div class="wrapper">
+        <div className="wrapper">
           <MetaTags>
             <title>Page 1</title>
             <meta name="description" content="Some description." />
             <meta property="og:title" content="MyApp" />
             <meta property="og:image" content="path/to/image.jpg" />
           </MetaTags>
-          <div class="content"> Some Content </div>
+          <div className="content"> Some Content </div>
         </div>
       )
   }
@@ -45,9 +45,9 @@ import {ReactTitle} from 'react-meta-tags';
 class Component2 extends React.Component {
   render() {
     return (
-        <div class="wrapper">
+        <div className="wrapper">
           <ReactTitle title="Page 2"/>
-          <div class="content"> Some Content </div>
+          <div className="content"> Some Content </div>
         </div>
       )
   }
@@ -124,6 +124,6 @@ So as per above code we have to do following for server rendering
 5. Append meta string to your html template.
 
 ## Meta Tag Uniqueness
-- The module uniquely identifies meta tag by id / property / name attribute.
+- The module uniquely identifies meta tag by id / property / name / itemProp attribute.
 - Multiple meta tags with same property / name is valid in html. If you need such case. Define a different id to both so that it can be uniquely differentiate.
-- You should give an id if meta key is different then property/name to uniquely identify them.
+- You should give an id if meta key is different then property/name/itemProp to uniquely identify them.

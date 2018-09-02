@@ -2,6 +2,8 @@ const metaRegex = /<meta[^<>]*?=(['"].*?['"]|[^<>]*?)*?\/?>/g;
 const canonicalLinkRegex = /<link[^<>]*?rel=['"]canonical['"].*?(\/>|<\/link>)/g;
 const titleRegex = /<title[^<>]*?>(.*?)<\/title>/g;
 const attributesRegex = /(\S*?)=("(.*?)"|'(.*?)'|([^<>\s]*))/g;
+const uniqueIdentifiers = ['property', 'name', 'itemprop'];
+const uniqueIdentifiersAll = uniqueIdentifiers.concat(['id']);
 
 /**
   Note:
@@ -15,7 +17,7 @@ function getAttributes(tagString) {
   if (!tagString) return attr;
   let match = attributesRegex.exec(tagString);
   while (match !== null) {
-    attr[match[1]] = match[3] || match[4] || match[5];
+    attr[match[1].toLowerCase()] = match[3] || match[4] || match[5];
     match = attributesRegex.exec(tagString);
   }
 
@@ -23,7 +25,7 @@ function getAttributes(tagString) {
 }
 
 function filterOutMetaWithId(metas) {
-  metas = Array.from(metas || []);
+  metas = Array.prototype.slice.call(metas || []);
   return metas.filter(meta => !meta.id);
 }
 
@@ -60,36 +62,44 @@ export function extractMetaAndTitle(domString) {
 }
 
 export function removeDuplicateMetas(metas) {
-  const metaAddedProperties = {};
-  const metaAddedNames = {};
-  const metaAddedIds = {};
+  const addedMeta = {};
+  
+  //initialize all the identifiers with empty array
+  uniqueIdentifiersAll.forEach((identifier) => {
+    addedMeta[identifier] = [];
+  });
 
   const filteredMetas = [];
   for (let i = metas.length - 1; i >=0 ; i--) {
     const meta = metas[i];
-    const {id, property, name} = meta;
+
+    const { id } = meta;
     let addMeta = false;
 
-    //if id is defined dont check any thing else
+    //if has id and element with id is not present than always add meta
     if (id) {
-      addMeta = !metaAddedIds[id];
+      addMeta = !addedMeta.id[id];
 
-    // if property key or name key is defined and its different add that,
-    // But they should have different id
-
-    } else if (property || name) {
-      const existing = metaAddedProperties[property] || metaAddedNames[name];
-      addMeta = !existing || existing.id; //if existing have id and the current doesn't then keep it
+    //for any other unique identifier check if meta already available with same identifier which doesn't have id
+    } else {
+      addMeta = uniqueIdentifiers.filter((identifier) => {
+        const existing = addedMeta[identifier][meta[identifier]];
+        return existing && !existing.id;
+      }).length === 0;
     }
-
-    if (id) metaAddedIds[id] = meta;
-    if (property) metaAddedProperties[property] = meta;
-    if (name) metaAddedNames[name] = meta;
 
     if (addMeta) {
       filteredMetas.unshift(meta);
+
+      //add meta as added 
+      uniqueIdentifiersAll.forEach((identifier) => {
+        const identifierValue = meta[identifier];
+        if (identifierValue) addedMeta[identifier][identifierValue] = meta; 
+      });
     }
   }
+
+  console.log(addedMeta);
 
   return filteredMetas;
 }
@@ -104,18 +114,20 @@ export function getDuplicateCanonical() {
 
 export function getDuplicateMeta(meta) {
   const head = document.head;
-  const {id, name} = meta;
-  const property = meta.getAttribute('property');
+  const { id } = meta;
 
+  //if has id and element with id is not present than return the element
   if (id) {
     return id && head.querySelector(`#${id}`);
-  } else if (name) {
-    return filterOutMetaWithId(head.querySelectorAll(`[name = "${name}"]`));
-  } else if (property) {
-    return filterOutMetaWithId(head.querySelectorAll(`[property = "${property}"]`));
-  }
+  } 
 
-  return null;
+  //for any other unique identifier check if metas already available with same identifier which doesn't have id
+  return uniqueIdentifiers.reduce((duplicates, identifier) => {
+    const identifierValue = meta.getAttribute(identifier);
+    return (identifierValue ? 
+      duplicates.concat(filterOutMetaWithId(head.querySelectorAll(`[${identifier} = "${identifierValue}"]`))) :
+      duplicates);
+  }, []);
 }
 
 
