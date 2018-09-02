@@ -1,5 +1,5 @@
 /*!
- * react-meta-tags - 0.4.2
+ * react-meta-tags - 0.5.0
  * Author : Sudhanshu Yadav
  * Copyright (c) 2016,2018 to Sudhanshu Yadav - ignitersworld.com , released under the MIT license.
  */
@@ -81,7 +81,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _meta_tags2 = _interopRequireDefault(_meta_tags);
 
-	var _react_title = __webpack_require__(111);
+	var _react_title = __webpack_require__(102);
 
 	var _react_title2 = _interopRequireDefault(_react_title);
 
@@ -2146,10 +2146,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends3 = _interopRequireDefault(_extends2);
 
-	var _from = __webpack_require__(102);
-
-	var _from2 = _interopRequireDefault(_from);
-
 	exports.extractMetaAndTitle = extractMetaAndTitle;
 	exports.removeDuplicateMetas = removeDuplicateMetas;
 	exports.getDuplicateTitle = getDuplicateTitle;
@@ -2165,6 +2161,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var canonicalLinkRegex = /<link[^<>]*?rel=['"]canonical['"].*?(\/>|<\/link>)/g;
 	var titleRegex = /<title[^<>]*?>(.*?)<\/title>/g;
 	var attributesRegex = /(\S*?)=("(.*?)"|'(.*?)'|([^<>\s]*))/g;
+	var uniqueIdentifiers = ['property', 'name', 'itemprop'];
+	var uniqueIdentifiersAll = uniqueIdentifiers.concat(['id']);
 
 	/**
 	  Note:
@@ -2178,7 +2176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!tagString) return attr;
 	  var match = attributesRegex.exec(tagString);
 	  while (match !== null) {
-	    attr[match[1]] = match[3] || match[4] || match[5];
+	    attr[match[1].toLowerCase()] = match[3] || match[4] || match[5];
 	    match = attributesRegex.exec(tagString);
 	  }
 
@@ -2186,7 +2184,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function filterOutMetaWithId(metas) {
-	  metas = (0, _from2.default)(metas || []);
+	  metas = Array.prototype.slice.call(metas || []);
 	  return metas.filter(function (meta) {
 	    return !meta.id;
 	  });
@@ -2224,38 +2222,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function removeDuplicateMetas(metas) {
-	  var metaAddedProperties = {};
-	  var metaAddedNames = {};
-	  var metaAddedIds = {};
+	  var addedMeta = {};
+
+	  //initialize all the identifiers with empty array
+	  uniqueIdentifiersAll.forEach(function (identifier) {
+	    addedMeta[identifier] = [];
+	  });
 
 	  var filteredMetas = [];
-	  for (var i = metas.length - 1; i >= 0; i--) {
+
+	  var _loop = function _loop(i) {
 	    var meta = metas[i];
-	    var id = meta.id,
-	        property = meta.property,
-	        name = meta.name;
+
+	    var id = meta.id;
 
 	    var addMeta = false;
 
-	    //if id is defined dont check any thing else
+	    //if has id and element with id is not present than always add meta
 	    if (id) {
-	      addMeta = !metaAddedIds[id];
+	      addMeta = !addedMeta.id[id];
 
-	      // if property key or name key is defined and its different add that,
-	      // But they should have different id
-	    } else if (property || name) {
-	      var existing = metaAddedProperties[property] || metaAddedNames[name];
-	      addMeta = !existing || existing.id; //if existing have id and the current doesn't then keep it
+	      //for any other unique identifier check if meta already available with same identifier which doesn't have id
+	    } else {
+	      addMeta = uniqueIdentifiers.filter(function (identifier) {
+	        var existing = addedMeta[identifier][meta[identifier]];
+	        return existing && !existing.id;
+	      }).length === 0;
 	    }
-
-	    if (id) metaAddedIds[id] = meta;
-	    if (property) metaAddedProperties[property] = meta;
-	    if (name) metaAddedNames[name] = meta;
 
 	    if (addMeta) {
 	      filteredMetas.unshift(meta);
+
+	      //add meta as added 
+	      uniqueIdentifiersAll.forEach(function (identifier) {
+	        var identifierValue = meta[identifier];
+	        if (identifierValue) addedMeta[identifier][identifierValue] = meta;
+	      });
 	    }
+	  };
+
+	  for (var i = metas.length - 1; i >= 0; i--) {
+	    _loop(i);
 	  }
+
+	  console.log(addedMeta);
 
 	  return filteredMetas;
 	}
@@ -2270,20 +2280,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function getDuplicateMeta(meta) {
 	  var head = document.head;
-	  var id = meta.id,
-	      name = meta.name;
+	  var id = meta.id;
 
-	  var property = meta.getAttribute('property');
+	  //if has id and element with id is not present than return the element
 
 	  if (id) {
 	    return id && head.querySelector('#' + id);
-	  } else if (name) {
-	    return filterOutMetaWithId(head.querySelectorAll('[name = "' + name + '"]'));
-	  } else if (property) {
-	    return filterOutMetaWithId(head.querySelectorAll('[property = "' + property + '"]'));
 	  }
 
-	  return null;
+	  //for any other unique identifier check if metas already available with same identifier which doesn't have id
+	  return uniqueIdentifiers.reduce(function (duplicates, identifier) {
+	    var identifierValue = meta.getAttribute(identifier);
+	    return identifierValue ? duplicates.concat(filterOutMetaWithId(head.querySelectorAll('[' + identifier + ' = "' + identifierValue + '"]'))) : duplicates;
+	  }, []);
 	}
 
 	//function to append childrens on a parent
@@ -2409,181 +2418,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 102 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(103), __esModule: true };
-
-/***/ }),
-/* 103 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	__webpack_require__(38);
-	__webpack_require__(104);
-	module.exports = __webpack_require__(16).Array.from;
-
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var ctx = __webpack_require__(17);
-	var $export = __webpack_require__(15);
-	var toObject = __webpack_require__(6);
-	var call = __webpack_require__(105);
-	var isArrayIter = __webpack_require__(106);
-	var toLength = __webpack_require__(54);
-	var createProperty = __webpack_require__(107);
-	var getIterFn = __webpack_require__(108);
-
-	$export($export.S + $export.F * !__webpack_require__(110)(function (iter) { Array.from(iter); }), 'Array', {
-	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-	  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-	    var O = toObject(arrayLike);
-	    var C = typeof this == 'function' ? this : Array;
-	    var aLen = arguments.length;
-	    var mapfn = aLen > 1 ? arguments[1] : undefined;
-	    var mapping = mapfn !== undefined;
-	    var index = 0;
-	    var iterFn = getIterFn(O);
-	    var length, result, step, iterator;
-	    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-	    // if object isn't iterable or it's array with default iterator - use simple case
-	    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
-	      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
-	        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
-	      }
-	    } else {
-	      length = toLength(O.length);
-	      for (result = new C(length); length > index; index++) {
-	        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
-	      }
-	    }
-	    result.length = index;
-	    return result;
-	  }
-	});
-
-
-/***/ }),
-/* 105 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(21);
-	module.exports = function (iterator, fn, value, entries) {
-	  try {
-	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-	  // 7.4.6 IteratorClose(iterator, completion)
-	  } catch (e) {
-	    var ret = iterator['return'];
-	    if (ret !== undefined) anObject(ret.call(iterator));
-	    throw e;
-	  }
-	};
-
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// check on default Array iterator
-	var Iterators = __webpack_require__(44);
-	var ITERATOR = __webpack_require__(59)('iterator');
-	var ArrayProto = Array.prototype;
-
-	module.exports = function (it) {
-	  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-	};
-
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var $defineProperty = __webpack_require__(20);
-	var createDesc = __webpack_require__(28);
-
-	module.exports = function (object, index, value) {
-	  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
-	  else object[index] = value;
-	};
-
-
-/***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var classof = __webpack_require__(109);
-	var ITERATOR = __webpack_require__(59)('iterator');
-	var Iterators = __webpack_require__(44);
-	module.exports = __webpack_require__(16).getIteratorMethod = function (it) {
-	  if (it != undefined) return it[ITERATOR]
-	    || it['@@iterator']
-	    || Iterators[classof(it)];
-	};
-
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(52);
-	var TAG = __webpack_require__(59)('toStringTag');
-	// ES3 wrong here
-	var ARG = cof(function () { return arguments; }()) == 'Arguments';
-
-	// fallback for IE11 Script Access Denied error
-	var tryGet = function (it, key) {
-	  try {
-	    return it[key];
-	  } catch (e) { /* empty */ }
-	};
-
-	module.exports = function (it) {
-	  var O, T, B;
-	  return it === undefined ? 'Undefined' : it === null ? 'Null'
-	    // @@toStringTag case
-	    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-	    // builtinTag case
-	    : ARG ? cof(O)
-	    // ES3 arguments fallback
-	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-	};
-
-
-/***/ }),
-/* 110 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var ITERATOR = __webpack_require__(59)('iterator');
-	var SAFE_CLOSING = false;
-
-	try {
-	  var riter = [7][ITERATOR]();
-	  riter['return'] = function () { SAFE_CLOSING = true; };
-	  // eslint-disable-next-line no-throw-literal
-	  Array.from(riter, function () { throw 2; });
-	} catch (e) { /* empty */ }
-
-	module.exports = function (exec, skipClosing) {
-	  if (!skipClosing && !SAFE_CLOSING) return false;
-	  var safe = false;
-	  try {
-	    var arr = [7];
-	    var iter = arr[ITERATOR]();
-	    iter.next = function () { return { done: safe = true }; };
-	    arr[ITERATOR] = function () { return iter; };
-	    exec(arr);
-	  } catch (e) { /* empty */ }
-	  return safe;
-	};
-
-
-/***/ }),
-/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
