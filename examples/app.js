@@ -36,17 +36,18 @@ app.use((req, res) => {
             return;
           }
 
-          const meta = metaTagsInstance.renderToString();
+          const metaString = metaTagsInstance.renderToString();
+          const metaComponents = metaTagsInstance.toComponents();
+          console.log(metaComponents);
 
           const template = `
-            <!doctype html>
             <html lang="en">
             <head>
               <meta charSet="utf-8"/>
               <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
               <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-              ${meta}
+              ${metaString}
               <!-- Bootstrap CSS -->
               <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
 
@@ -56,8 +57,23 @@ app.use((req, res) => {
               <script src="http://localhost:9000/bundle.js"></script>
             </body>
           `;
+          const Html = (<html lang="en">
+            <head>
+              <meta charSet="utf-8"/>
+              <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+              <meta http-equiv="x-ua-compatible" content="ie=edge" />
+              {metaComponents}
+              <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous" />
+            </head>
+            <body>
+              <div id="app" dangerouslySetInnerHTML={{__html: reactString}} />
+              <script src="http://localhost:9000/bundle.js"></script>
+            </body>
+          </html>)
 
-        res.status(200).send(template)
+        //res.status(200).send(`<!doctype html>${template}`)
+        const htmlMarkup = ReactDomServer.renderToStaticMarkup(Html)
+        res.status(200).send(`<!doctype html>${htmlMarkup}`)
       } else {
         console.log('redirected');
         res.status(301).redirect('/')
