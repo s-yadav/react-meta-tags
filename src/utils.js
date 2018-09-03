@@ -99,8 +99,6 @@ export function removeDuplicateMetas(metas) {
     }
   }
 
-  console.log(addedMeta);
-
   return filteredMetas;
 }
 

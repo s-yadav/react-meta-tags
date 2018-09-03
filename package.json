@@ -1,7 +1,7 @@
 {
   "name": "react-meta-tags",
   "description": "Handle document meta/head tags in isomorphic react with ease.",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "lib/index.js",
   "author": "Sudhanshu Yadav",
   "license": "MIT",

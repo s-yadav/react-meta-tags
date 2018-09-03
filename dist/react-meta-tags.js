@@ -1,5 +1,5 @@
 /*!
- * react-meta-tags - 0.5.0
+ * react-meta-tags - 0.5.1
  * Author : Sudhanshu Yadav
  * Copyright (c) 2016,2018 to Sudhanshu Yadav - ignitersworld.com , released under the MIT license.
  */
@@ -2264,8 +2264,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (var i = metas.length - 1; i >= 0; i--) {
 	    _loop(i);
 	  }
-
-	  console.log(addedMeta);
 
 	  return filteredMetas;
 	}
