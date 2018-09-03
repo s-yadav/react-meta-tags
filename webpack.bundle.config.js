@@ -1,10 +1,16 @@
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const PACKAGE = require('./package.json');
 const fullYear = new Date().getFullYear();
 const banner = PACKAGE.name + ' - ' + PACKAGE.version + '\n' +
   'Author : '+PACKAGE.author+'\n'+
   'Copyright (c) '+ (fullYear!== 2016 ? '2016,' : '') + fullYear + ' to ' + PACKAGE.author + ' - ignitersworld.com , released under the '+PACKAGE.license+' license.'
   /* +PACKAGE.homepage */;
+
+const useBundleAnalyzer = false;
+const bundleAnalyzer = useBundleAnalyzer
+  ? new BundleAnalyzerPlugin({openAnalyzer: false})
+  : () => {};
 
 module.exports = {
   entry: {
@@ -54,7 +60,8 @@ module.exports = {
           include: /\.min\.js$/,
           minimize: true
     }),
-    new webpack.BannerPlugin(banner)
+    new webpack.BannerPlugin(banner),
+    bundleAnalyzer
   ],
   resolve: {
     extensions: ['','.js']
