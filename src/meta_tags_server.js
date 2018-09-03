@@ -28,6 +28,9 @@ function MetaTagsServer(){
         ${canonicalLink}
         ${rest}
       `;
+    },
+    toComponents: function(){
+      return headElms;
     }
   }
 }
