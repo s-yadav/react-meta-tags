@@ -32,4 +32,4 @@ function MetaTagsServer(){
   }
 }
 
-module.exports = MetaTagsServer;
+export default MetaTagsServer;

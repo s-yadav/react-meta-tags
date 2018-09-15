@@ -36,7 +36,8 @@ app.use((req, res) => {
             return;
           }
 
-          const meta = metaTagsInstance.renderToString();
+          //const meta = metaTagsInstance.renderToString();
+          const meta = '';
 
           const template = `
             <!doctype html>
