@@ -1,4 +1,6 @@
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const PACKAGE = require('./package.json');
 const fullYear = new Date().getFullYear();
 const banner = PACKAGE.name + ' - ' + PACKAGE.version + '\n' +
@@ -7,27 +9,21 @@ const banner = PACKAGE.name + ' - ' + PACKAGE.version + '\n' +
   /* +PACKAGE.homepage */;
 
 module.exports = {
+  mode: 'production',
   entry: {
     'dist/react-meta-tags' : [
       './src/index.js'
     ],
     'dist/react-meta-tags.min' : [
       './src/index.js'
-    ],
-    'lib/meta_tags' : [
-      './src/index.js'
     ]
   },
-  debug: false,
   output: {
     // publicPath: "http://localhost:8081/public/js/",
     // path: path.join(__dirname, "public","js"),
     filename: '[name].js',
     libraryTarget : 'umd',
     library : 'MetaTags'
-  },
-  resolveLoader: {
-    modulesDirectories: ['','node_modules']
   },
   externals: {
     react: {
@@ -50,18 +46,20 @@ module.exports = {
         NODE_ENV: JSON.stringify("production")
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-          include: /\.min\.js$/,
-          minimize: true
-    }),
-    new webpack.BannerPlugin(banner)
+    // new webpack.optimize.UglifyJsPlugin({
+    //       include: /\.min\.js$/,
+    //       minimize: true
+    // }),
+    new webpack.BannerPlugin(banner),
+    new BundleAnalyzerPlugin(),
   ],
-  resolve: {
-    extensions: ['','.js']
-  },
   module: {
-    loaders: [
-      {test: /\.js$/, loaders:['babel','eslint-loader'], exclude: /node_modules/},
+    rules: [
+      {
+        test: /\.js$/,
+        use: ['babel-loader','eslint-loader'],
+        exclude: /node_modules/,
+      }
     ]
   }
 };
