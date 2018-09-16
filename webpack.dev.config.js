@@ -5,21 +5,22 @@ module.exports = {
     ]
   },
   devtool: "eval",
-  debug: true,
   output: {
-    publicPath: "http://localhost:9000/",
+    //publicPath: "http://localhost:9000/",
     // path: path.join(__dirname, "public","js"),
     filename: '[name].js'
   },
-  resolveLoader: {
-    modulesDirectories: ['node_modules']
-  },
-  resolve: {
-    extensions: ['','.js'] //can add jsx also but not required
+  devServer: {
+    //contentBase: path.join(__dirname, 'dist'),
+    port: 9000,
   },
   module: {
-    loaders: [
-      {test: /\.js$/, loaders:['babel','eslint-loader'], exclude: /node_modules/},
+    rules: [
+      {
+        test: /\.js$/,
+        use: ['babel-loader','eslint-loader'],
+        exclude: /node_modules/,
+      }
     ]
-  }
+  },
 };
