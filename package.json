@@ -1,7 +1,7 @@
 {
   "name": "react-meta-tags",
   "description": "Handle document meta/head tags in isomorphic react with ease.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "lib/index.js",
   "author": "Sudhanshu Yadav",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "react-meta-tags"
   ],
   "scripts": {
-    "start": "cross-env nodemon example.js | npm run start-dev",
+    "start": "cross-env npm run start-dev | nodemon example.js",
     "start-dev": "cross-env webpack-dev-server --content-base example/ --config webpack.dev.config.js --watch-poll --progress --inline --hot",
     "bundle": "cross-env NODE_ENV=production rollup -c rollup.config.js && npm run compile",
     "compile": "cross-env babel src --out-dir lib"

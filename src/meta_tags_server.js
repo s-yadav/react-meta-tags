@@ -1,16 +1,20 @@
 import React from 'react';
 import ReactDomServer from 'react-dom/server';
-import {extractMetaAndTitle, removeDuplicateMetas} from './utils';
+import {filterAndArrangeTags} from './utils';
 
 function MetaTagsServer(){
-  const headElms = [];
+  let headElms = [];
 
   return {
-    extract: function(elms){
-      headElms.push(elms);
+    extract(elms) {
+      if (!(elms instanceof Array)) {
+        elms = [elms];
+      }
+      headElms = headElms.concat(elms);
     },
-    renderToString: function(){
-      const headComponent = <div className="react-head-temp">{headElms}</div>;
+    renderToString() {
+      const filteredElms = filterAndArrangeTags(headElms);
+      const headComponent = <div className="react-head-temp">{filteredElms}</div>;
       let componentStr = ReactDomServer.renderToStaticMarkup(headComponent);
 
       //remove wrapper div from string
@@ -18,16 +22,10 @@ function MetaTagsServer(){
         return $2;
       });
 
-      const {title = '', metas, canonicalLink = '', rest} = extractMetaAndTitle(componentStr);
-
-      const metasStr = removeDuplicateMetas(metas).map(meta => meta._tagString).join('');
-
-      return `
-        ${title}
-        ${metasStr}
-        ${canonicalLink}
-        ${rest}
-      `;
+      return componentStr;
+    },
+    getTags() {
+      return filterAndArrangeTags(headElms);
     }
   }
 }

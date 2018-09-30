@@ -1,5 +1,5 @@
 /**
- * react-meta-tags - 0.6.0
+ * react-meta-tags - 0.7.0
  * Author : Sudhanshu Yadav
  * Copyright (c) 2016, 2018 to Sudhanshu Yadav, released under the MIT license.
  * https://github.com/s-yadav/react-meta-tags
@@ -292,7 +292,13 @@ _defineProperty(MetaTagsContext, "childContextTypes", {
   extract: propTypes.func
 });
 
-var uniqueIdentifiers = ['property', 'name', 'itemprop'];
+var uniqueIdentifiersI = ['property', 'name', 'itemprop'];
+/**
+  Note:
+  1. In server side we will add meta tags and title at last after fitering
+  2. In client we will match and replace meta tagString
+  3. For now we will not support link and other tags properly, they can be added but we will not check for uniqueness and will not decide placement
+**/
 
 function filterOutMetaWithId(metas) {
   metas = Array.prototype.slice.call(metas || []);
@@ -300,6 +306,7 @@ function filterOutMetaWithId(metas) {
     return !meta.id;
   });
 }
+
 function getDuplicateTitle() {
   return document.head.querySelectorAll('title');
 }
@@ -315,7 +322,7 @@ function getDuplicateMeta(meta) {
   } //for any other unique identifier check if metas already available with same identifier which doesn't have id
 
 
-  return uniqueIdentifiers.reduce(function (duplicates, identifier) {
+  return uniqueIdentifiersI.reduce(function (duplicates, identifier) {
     var identifierValue = meta.getAttribute(identifier);
     return identifierValue ? duplicates.concat(filterOutMetaWithId(head.querySelectorAll("[".concat(identifier, " = \"").concat(identifierValue, "\"]")))) : duplicates;
   }, []);

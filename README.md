@@ -68,37 +68,37 @@ import {MetaTagsContext} from 'react-meta-tags';
 */
 
 app.use((req, res) => {
-    //make sure you get a new metatags instance for each request
-    const metaTagsInstance = MetaTagsServer();
+  //make sure you get a new metatags instance for each request
+  const metaTagsInstance = MetaTagsServer();
 
-    //react router match
-    match({
-      routes, location: req.url
-    }, (error, redirectLocation, renderProps) => {
-      let reactString;
+  //react router match
+  match({
+    routes, location: req.url
+  }, (error, redirectLocation, renderProps) => {
+    let reactString;
 
-      try{
-        reactString = ReactDomServer.renderToString(
-        <Provider store={store}> {/*** If you are using redux ***/}
-        {/* You have to pass extract method through MetaTagsContext so it can catch meta tags */}
-          <MetaTagsContext extract = {metaTagsInstance.extract}>
-            <RouterContext {...renderProps}/>
-          </MetaTagsContext>
-        </Provider>
-        );
-      }
-      catch(e){
-        res.status(500).send(e.stack);
-        return;
-      }
+    try{
+      reactString = ReactDomServer.renderToString(
+      <Provider store={store}> {/*** If you are using redux ***/}
+      {/* You have to pass extract method through MetaTagsContext so it can catch meta tags */}
+        <MetaTagsContext extract = {metaTagsInstance.extract}>
+          <RouterContext {...renderProps}/>
+        </MetaTagsContext>
+      </Provider>
+      );
+    }
+    catch(e){
+      res.status(500).send(e.stack);
+      return;
+    }
 
-      //get all title and metatags as string
-      const meta = metaTagsInstance.renderToString();
+    //get all title and metatags as string
+    const meta = metaTagsInstance.renderToString();
 
-      //append metatag string to your template
-      const template = (`
-        <!doctype html>
-        <html lang="en-us">
+    //append metatag string to your layout
+    const htmlStr = (`
+      <!doctype html>
+      <html lang="en-us">
         <head>
           <meta charSet="utf-8"/>
           ${meta}
@@ -107,11 +107,12 @@ app.use((req, res) => {
           <div id="content">
             ${reactString}
           </div>
-        </body>  
-      `);
+        </body>
+      </html>  
+    `);
 
-      res.status(200).send(template);
-    });
+    res.status(200).send(layout);
+  });
 });
 ```
 
@@ -122,6 +123,32 @@ So as per above code we have to do following for server rendering
 3. Wrap your component inside MetaTagsContext and pass extract method as props
 4. Extract meta string using renderToString of MetaTagsServer instance
 5. Append meta string to your html template.
+
+#### JSX Layout
+You might also be using React to define your layout, in which case you can use `getTags` method from `metaTagsInstance`. The layout part of above server side example will look like this.
+```jsx
+//get all title and metatags as React elements
+const metaTags = metaTagsInstance.getTags();
+
+//append metatag string to your layout
+const layout = (
+  <html lang="en-us">
+    <head>
+      <meta charSet="utf-8"/>
+      {metaTags}
+    </head>
+    <body>
+      <div id="app" dangerouslySetInnerHTML={{__html: reactString}} />
+    </body>
+  </html>  
+);
+
+const htmlStr = ReactDomServer.renderToString(layout);
+
+res.status(200).send(htmlStr);
+```
+
+
 
 ## Meta Tag Uniqueness
 - The module uniquely identifies meta tag by id / property / name / itemProp attribute.
