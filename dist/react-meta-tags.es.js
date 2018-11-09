@@ -1,5 +1,5 @@
 /**
- * react-meta-tags - 0.7.1
+ * react-meta-tags - 0.7.2
  * Author : Sudhanshu Yadav
  * Copyright (c) 2016, 2018 to Sudhanshu Yadav, released under the MIT license.
  * https://github.com/s-yadav/react-meta-tags
@@ -366,12 +366,16 @@ function (_Component) {
   }
 
   _createClass(MetaTags, [{
-    key: "extractChildren",
-    value: function extractChildren() {
-      var extract = this.context.extract;
-
-      if (extract) {
-        extract(this.props.children);
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.temporaryElement = document.createElement('div');
+      this.handleChildrens();
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(oldProps) {
+      if (oldProps.children !== this.props.children) {
+        this.handleChildrens();
       }
     }
   }, {
@@ -379,6 +383,15 @@ function (_Component) {
     value: function componentWillUnmount() {
       if (this.temporaryElement) {
         ReactDOM.unmountComponentAtNode(this.temporaryElement);
+      }
+    }
+  }, {
+    key: "extractChildren",
+    value: function extractChildren() {
+      var extract = this.context.extract;
+
+      if (extract) {
+        extract(this.props.children);
       }
     }
   }, {
@@ -427,19 +440,6 @@ function (_Component) {
         });
         appendChild(document.head, childNodes);
       });
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.temporaryElement = document.createElement('div');
-      this.handleChildrens();
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(oldProps) {
-      if (oldProps.children !== this.props.children) {
-        this.handleChildrens();
-      }
     }
   }, {
     key: "render",

@@ -9,16 +9,25 @@ class MetaTags extends Component {
   static contextTypes = {
     extract: PropTypes.func
   };
-  extractChildren() {
-    const {extract} = this.context;
-
-    if (extract) {
-      extract(this.props.children);
+  componentDidMount() {
+    this.temporaryElement = document.createElement('div');
+    this.handleChildrens();
+  }
+  componentDidUpdate(oldProps) {
+    if (oldProps.children !== this.props.children) {
+      this.handleChildrens();
     }
   }
   componentWillUnmount() {
     if (this.temporaryElement) {
       ReactDOM.unmountComponentAtNode(this.temporaryElement);
+    }
+  }
+  extractChildren() {
+    const {extract} = this.context;
+
+    if (extract) {
+      extract(this.props.children);
     }
   }
   handleChildrens() {
@@ -68,15 +77,6 @@ class MetaTags extends Component {
       appendChild(document.head, childNodes);
     });
 
-  }
-  componentDidMount() {
-    this.temporaryElement = document.createElement('div');
-    this.handleChildrens();
-  }
-  componentDidUpdate(oldProps) {
-    if (oldProps.children !== this.props.children) {
-      this.handleChildrens();
-    }
   }
   render() {
     this.extractChildren();

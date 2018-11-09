@@ -10,6 +10,10 @@ function MetaTagsServer(){
       if (!(elms instanceof Array)) {
         elms = [elms];
       }
+      
+      //filter out null nodes
+      elms = elms.filter(elm => !!elm);
+
       headElms = headElms.concat(elms);
     },
     renderToString() {
