@@ -8,13 +8,12 @@ import {getDuplicateTitle, getDuplicateCanonical, getDuplicateMeta, appendChild,
 class MetaTags extends Component {
   static contextTypes = {
     extract: PropTypes.func
-  }
+  };
   extractChildren() {
     const {extract} = this.context;
 
     if (extract) {
       extract(this.props.children);
-      return;
     }
   }
   componentWillUnmount() {

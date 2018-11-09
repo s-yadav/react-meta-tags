@@ -372,7 +372,13 @@ function (_Component) {
 
       if (extract) {
         extract(this.props.children);
-        return;
+      }
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      if (this.temporaryElement) {
+        ReactDOM.unmountComponentAtNode(this.temporaryElement);
       }
     }
   }, {
@@ -389,16 +395,15 @@ function (_Component) {
       var headComponent = React.createElement("div", {
         className: "react-head-temp"
       }, children);
-      var temp = document.createElement("div");
-      ReactDOM.render(headComponent, temp, function () {
-        var childStr = temp.innerHTML; //if html is not changed return
+      ReactDOM.render(headComponent, this.temporaryElement, function () {
+        var childStr = _this.temporaryElement.innerHTML; //if html is not changed return
 
         if (_this.lastChildStr === childStr) {
           return;
         }
 
         _this.lastChildStr = childStr;
-        var childNodes = Array.prototype.slice.call(temp.querySelector('.react-head-temp').children);
+        var childNodes = Array.prototype.slice.call(_this.temporaryElement.querySelector('.react-head-temp').children);
         var head = document.head;
         var headHtml = head.innerHTML; //filter children remove if children has not been changed
 
@@ -426,6 +431,7 @@ function (_Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
+      this.temporaryElement = document.createElement('div');
       this.handleChildrens();
     }
   }, {
