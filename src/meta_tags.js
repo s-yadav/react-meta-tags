@@ -17,6 +17,11 @@ class MetaTags extends Component {
       return;
     }
   }
+  componentWillUnmount() {
+    if (this.temporaryElement) {
+      ReactDOM.unmountComponentAtNode(this.temporaryElement);
+    }
+  }
   handleChildrens() {
     const {children} = this.props;
 
@@ -26,9 +31,8 @@ class MetaTags extends Component {
 
     const headComponent = <div className="react-head-temp">{children}</div>;
 
-    const temp = document.createElement("div");
-    ReactDOM.render(headComponent, temp, () => {
-      const childStr = temp.innerHTML;
+    ReactDOM.render(headComponent, this.temporaryElement, () => {
+      const childStr = this.temporaryElement.innerHTML;
 
       //if html is not changed return
       if(this.lastChildStr === childStr){
@@ -37,7 +41,7 @@ class MetaTags extends Component {
 
       this.lastChildStr = childStr;
 
-      let childNodes = Array.prototype.slice.call(temp.querySelector('.react-head-temp').children);
+      let childNodes = Array.prototype.slice.call(this.temporaryElement.querySelector('.react-head-temp').children);
 
       const head = document.head;
       const headHtml = head.innerHTML;
@@ -67,6 +71,7 @@ class MetaTags extends Component {
 
   }
   componentDidMount() {
+    this.temporaryElement = document.createElement('div');
     this.handleChildrens();
   }
   componentDidUpdate(oldProps) {
