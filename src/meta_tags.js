@@ -24,6 +24,7 @@ class MetaTags extends Component {
     }
   }
   extractChildren() {
+    if(!this.context.children) return;
     const {extract} = this.context;
 
     if (extract) {
@@ -31,6 +32,7 @@ class MetaTags extends Component {
     }
   }
   handleChildrens() {
+    if(!this.props.children) return;
     const {children} = this.props;
 
     if (this.context.extract){
