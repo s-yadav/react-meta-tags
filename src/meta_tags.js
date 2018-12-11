@@ -25,15 +25,19 @@ class MetaTags extends Component {
   }
   extractChildren() {
     const {extract} = this.context;
+    const {children} = this.props;
+
+    if(!children) {
+      return;
+    }
 
     if (extract) {
-      extract(this.props.children);
+      extract(children);
     }
   }
   handleChildrens() {
     const {children} = this.props;
-
-    if (this.context.extract){
+    if (this.context.extract || !children){
       return;
     }
 
