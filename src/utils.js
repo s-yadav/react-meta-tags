@@ -127,10 +127,3 @@ export function removeChild(parent, childrens) {
     parent.removeChild(childrens[i]);
   }
 }
-
-//get dom as string format
-export function getDomAsString(dom) {
-  const temp = document.createElement('div');
-  temp.appendChild(dom);
-  return temp.innerHTML;
-}

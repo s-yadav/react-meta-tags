@@ -1,5 +1,5 @@
 /**
- * react-meta-tags - 0.7.2
+ * react-meta-tags - 0.7.3
  * Author : Sudhanshu Yadav
  * Copyright (c) 2016, 2018 to Sudhanshu Yadav, released under the MIT license.
  * https://github.com/s-yadav/react-meta-tags
@@ -344,12 +344,6 @@ function removeChild(parent, childrens) {
   for (var i = 0, ln = childrens.length; i < ln; i++) {
     parent.removeChild(childrens[i]);
   }
-} //get dom as string format
-
-function getDomAsString(dom) {
-  var temp = document.createElement('div');
-  temp.appendChild(dom);
-  return temp.innerHTML;
 }
 
 /** An wrapper component to wrap element which need to shifted to head **/
@@ -389,9 +383,14 @@ function (_Component) {
     key: "extractChildren",
     value: function extractChildren() {
       var extract = this.context.extract;
+      var children = this.props.children;
+
+      if (!children) {
+        return;
+      }
 
       if (extract) {
-        extract(this.props.children);
+        extract(children);
       }
     }
   }, {
@@ -401,7 +400,7 @@ function (_Component) {
 
       var children = this.props.children;
 
-      if (this.context.extract) {
+      if (this.context.extract || !children) {
         return;
       }
 
@@ -421,7 +420,11 @@ function (_Component) {
         var headHtml = head.innerHTML; //filter children remove if children has not been changed
 
         childNodes = childNodes.filter(function (child) {
-          return headHtml.indexOf(getDomAsString(child)) === -1;
+          return headHtml.indexOf(child.outerHTML) === -1;
+        }); //create clone of childNodes
+
+        childNodes = childNodes.map(function (child) {
+          return child.cloneNode(true);
         }); //remove duplicate title and meta from head
 
         childNodes.forEach(function (child) {

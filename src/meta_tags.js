@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {getDuplicateTitle, getDuplicateCanonical, getDuplicateMeta, appendChild, removeChild, getDomAsString} from './utils';
+import {getDuplicateTitle, getDuplicateCanonical, getDuplicateMeta, appendChild, removeChild} from './utils';
 
 
 /** An wrapper component to wrap element which need to shifted to head **/
@@ -60,8 +60,11 @@ class MetaTags extends Component {
 
       //filter children remove if children has not been changed
       childNodes = childNodes.filter((child) => {
-        return headHtml.indexOf(getDomAsString(child)) === -1;
+        return headHtml.indexOf(child.outerHTML) === -1;
       });
+
+      //create clone of childNodes
+      childNodes = childNodes.map((child) => child.cloneNode(true));
 
       //remove duplicate title and meta from head
       childNodes.forEach((child) => {
