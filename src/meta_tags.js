@@ -53,7 +53,10 @@ class MetaTags extends Component {
 
       this.lastChildStr = childStr;
 
-      let childNodes = Array.prototype.slice.call(this.temporaryElement.querySelector('.react-head-temp').children);
+      const tempHead = this.temporaryElement.querySelector('.react-head-temp');
+      let childNodes = tempHead === null
+          ? []
+          : Array.prototype.slice.call(tempHead.children);
 
       const head = document.head;
       const headHtml = head.innerHTML;
