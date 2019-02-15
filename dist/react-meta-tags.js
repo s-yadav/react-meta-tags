@@ -1,7 +1,7 @@
 /**
- * react-meta-tags - 0.7.3
+ * react-meta-tags - 0.7.4
  * Author : Sudhanshu Yadav
- * Copyright (c) 2016, 2018 to Sudhanshu Yadav, released under the MIT license.
+ * Copyright (c) 2016, 2019 to Sudhanshu Yadav, released under the MIT license.
  * https://github.com/s-yadav/react-meta-tags
  */
 
@@ -421,7 +421,15 @@
           }
 
           _this.lastChildStr = childStr;
-          var childNodes = Array.prototype.slice.call(_this.temporaryElement.querySelector('.react-head-temp').children);
+
+          var tempHead = _this.temporaryElement.querySelector('.react-head-temp'); // .react-head-temp might not exist when triggered from async action
+
+
+          if (tempHead === null) {
+            return;
+          }
+
+          var childNodes = Array.prototype.slice.call(tempHead.children);
           var head = document.head;
           var headHtml = head.innerHTML; //filter children remove if children has not been changed
 
