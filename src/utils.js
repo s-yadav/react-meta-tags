@@ -1,5 +1,5 @@
-const camelCaseProps = ['itemProp']; 
-const uniqueIdentifiersI = ['property', 'name', 'itemprop']; 
+const camelCaseProps = ['itemProp'];
+const uniqueIdentifiersI = ['property', 'name', 'itemprop'];
 const uniqueIdentifiers = uniqueIdentifiersI.concat(camelCaseProps); //case sensitive props is defined in case anyone defined the lowercase prop
 const uniqueIdentifiersAll = uniqueIdentifiers.concat(['id']);
 
@@ -39,7 +39,7 @@ export function filterAndArrangeTags(headElms) {
 
 function removeDuplicateMetas(metas) {
   const addedMeta = {};
-  
+
   //initialize all the identifiers with empty array
   uniqueIdentifiersAll.forEach((identifier) => {
     addedMeta[identifier] = [];
@@ -68,10 +68,10 @@ function removeDuplicateMetas(metas) {
     if (addMeta) {
       filteredMetas.unshift(meta);
 
-      //add meta as added 
+      //add meta as added
       uniqueIdentifiersAll.forEach((identifier) => {
         const identifierValue = meta.props[identifier];
-        if (identifierValue) addedMeta[identifier][identifierValue] = meta; 
+        if (identifierValue) addedMeta[identifier][identifierValue] = meta;
       });
     }
   }
@@ -87,6 +87,10 @@ export function getDuplicateCanonical() {
   return document.head.querySelectorAll('link[rel="canonical"]');
 }
 
+export function getDuplicateJsonLd() {
+  return document.head.querySelectorAll('script[type="application/ld+json"]');
+}
+
 export function getDuplicateMeta(meta) {
   const head = document.head;
   const { id } = meta;
@@ -94,12 +98,12 @@ export function getDuplicateMeta(meta) {
   //if has id and element with id is not present than return the element
   if (id) {
     return id && head.querySelector(`#${id}`);
-  } 
+  }
 
   //for any other unique identifier check if metas already available with same identifier which doesn't have id
   return uniqueIdentifiersI.reduce((duplicates, identifier) => {
     const identifierValue = meta.getAttribute(identifier);
-    return (identifierValue ? 
+    return (identifierValue ?
       duplicates.concat(filterOutMetaWithId(head.querySelectorAll(`[${identifier} = "${identifierValue}"]`))) :
       duplicates);
   }, []);
