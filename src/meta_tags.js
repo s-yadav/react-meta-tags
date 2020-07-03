@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {getDuplicateTitle, getDuplicateCanonical, getDuplicateMeta, appendChild, removeChild} from './utils';
+import {getDuplicateTitle, getDuplicateCanonical, getDuplicateMeta, getDuplicateJsonLd, appendChild, removeChild} from './utils';
 
 
 /** An wrapper component to wrap element which need to shifted to head **/
@@ -85,6 +85,9 @@ class MetaTags extends Component {
         } else if (tag === 'link' && child.rel === 'canonical') {
           const link = getDuplicateCanonical(child);
           if (link) removeChild(head, link);
+        } else if (tag === 'script' && child.type === 'application/ld+json') {
+          const script = getDuplicateJsonLd(child);
+          if (script) removeChild(head, script);
         }
       });
 
