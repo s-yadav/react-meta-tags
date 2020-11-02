@@ -1,17 +1,24 @@
-import {Component, Children} from 'react';
-import PropTypes from 'prop-types';
+import React, {Component, Children, createContext} from 'react';
+
+const MetaContext = createContext({
+  extract: () => {},
+});
 
 /** context class which passes extract fuunction to MetaTags Component **/
-class MetaTagsContext extends Component {
-  static childContextTypes = {
-    extract: PropTypes.func
-  }
-  getChildContext() {
-    return {extract: this.props.extract};
-  }
+class MetaContextProviderWrapper extends Component {
   render() {
-    return Children.only(this.props.children);
+    return (
+      <MetaContext.Provider
+        value={{
+          extract: this.props.extract,
+        }}
+      >
+        {Children.only(this.props.children)}
+      </MetaContext.Provider>
+    );
   }
 }
 
-export default MetaTagsContext;
+export {MetaContext};
+
+export default MetaContextProviderWrapper;

@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {getDuplicateTitle, getDuplicateCanonical, getDuplicateMeta, appendChild, removeChild} from './utils';
+import { MetaContext } from './meta_tags_context';
 
 
 /** An wrapper component to wrap element which need to shifted to head **/
 class MetaTags extends Component {
-  static contextTypes = {
-    extract: PropTypes.func
-  };
+  static contextTypes = MetaContext;
+
   componentDidMount() {
     this.temporaryElement = document.createElement('div');
     this.handleChildrens();
