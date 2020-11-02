@@ -1,8 +1,6 @@
 import React, {Component, Children, createContext} from 'react';
 
-const MetaContext = createContext({
-  extract: () => {},
-});
+const MetaContext = createContext({});
 
 /** context class which passes extract fuunction to MetaTags Component **/
 class MetaContextProviderWrapper extends Component {
