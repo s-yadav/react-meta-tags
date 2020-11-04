@@ -6,7 +6,7 @@ import { MetaContext } from './meta_tags_context';
 
 /** An wrapper component to wrap element which need to shifted to head **/
 class MetaTags extends Component {
-  static contextTypes = MetaContext;
+  static contextType = MetaContext;
 
   componentDidMount() {
     this.temporaryElement = document.createElement('div');
