@@ -1,8 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {getDuplicateTitle, getDuplicateCanonical, getDuplicateMeta, appendChild, removeChild} from './utils';
+import {
+  getDuplicateTitle,
+  getDuplicateCanonical,
+  getDuplicateMeta,
+  getDuplicateElementById,
+  appendChild,
+  removeChild,
+} from './utils';
 import { MetaContext } from './meta_tags_context';
-
 
 /** An wrapper component to wrap element which need to shifted to head **/
 class MetaTags extends Component {
@@ -23,10 +29,10 @@ class MetaTags extends Component {
     }
   }
   extractChildren() {
-    const {extract} = this.context;
-    const {children} = this.props;
+    const { extract } = this.context;
+    const { children } = this.props;
 
-    if(!children) {
+    if (!children) {
       return;
     }
 
@@ -35,8 +41,8 @@ class MetaTags extends Component {
     }
   }
   handleChildrens() {
-    const {children} = this.props;
-    if (this.context.extract || !children){
+    const { children } = this.props;
+    if (this.context.extract || !children) {
       return;
     }
 
@@ -46,7 +52,7 @@ class MetaTags extends Component {
       const childStr = this.temporaryElement.innerHTML;
 
       //if html is not changed return
-      if(this.lastChildStr === childStr){
+      if (this.lastChildStr === childStr) {
         return;
       }
 
@@ -78,6 +84,10 @@ class MetaTags extends Component {
         if (tag === 'title') {
           const title = getDuplicateTitle();
           if (title) removeChild(head, title);
+        } else if (child.id) {
+          // if the element has id defined remove the existing element with that id
+          const elm = getDuplicateElementById(child);
+          if (elm) removeChild(head, elm);
         } else if (tag === 'meta') {
           const meta = getDuplicateMeta(child);
           if (meta) removeChild(head, meta);
@@ -89,7 +99,6 @@ class MetaTags extends Component {
 
       appendChild(document.head, childNodes);
     });
-
   }
   render() {
     this.extractChildren();
