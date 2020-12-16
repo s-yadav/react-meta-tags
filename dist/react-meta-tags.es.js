@@ -1,11 +1,11 @@
 /**
- * react-meta-tags - 0.7.4
+ * react-meta-tags - 1.0.1
  * Author : Sudhanshu Yadav
- * Copyright (c) 2016, 2019 to Sudhanshu Yadav, released under the MIT license.
+ * Copyright (c) 2016, 2020 to Sudhanshu Yadav, released under the MIT license.
  * https://github.com/s-yadav/react-meta-tags
  */
 
-import React, { Component, Children } from 'react';
+import React, { Component, Children, createContext } from 'react';
 import ReactDOM from 'react-dom';
 
 function _classCallCheck(instance, Constructor) {
@@ -92,205 +92,33 @@ function _possibleConstructorReturn(self, call) {
   return _assertThisInitialized(self);
 }
 
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-/* eslint-disable no-unused-vars */
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !==
-				'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (err) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
-};
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-var ReactPropTypesSecret_1 = ReactPropTypesSecret;
-
-function emptyFunction() {}
-
-var factoryWithThrowingShims = function() {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret_1) {
-      // It is still safe when called from React.
-      return;
-    }
-    var err = new Error(
-      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-      'Use PropTypes.checkPropTypes() to call them. ' +
-      'Read more at http://fb.me/use-check-prop-types'
-    );
-    err.name = 'Invariant Violation';
-    throw err;
-  }  shim.isRequired = shim;
-  function getShim() {
-    return shim;
-  }  // Important!
-  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-  var ReactPropTypes = {
-    array: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim
-  };
-
-  ReactPropTypes.checkPropTypes = emptyFunction;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
-var propTypes = createCommonjsModule(function (module) {
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-{
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = factoryWithThrowingShims();
-}
-});
-
+var MetaContext = createContext({});
 /** context class which passes extract fuunction to MetaTags Component **/
 
-var MetaTagsContext =
+var MetaContextProviderWrapper =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(MetaTagsContext, _Component);
+  _inherits(MetaContextProviderWrapper, _Component);
 
-  function MetaTagsContext() {
-    _classCallCheck(this, MetaTagsContext);
+  function MetaContextProviderWrapper() {
+    _classCallCheck(this, MetaContextProviderWrapper);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(MetaTagsContext).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(MetaContextProviderWrapper).apply(this, arguments));
   }
 
-  _createClass(MetaTagsContext, [{
-    key: "getChildContext",
-    value: function getChildContext() {
-      return {
-        extract: this.props.extract
-      };
-    }
-  }, {
+  _createClass(MetaContextProviderWrapper, [{
     key: "render",
     value: function render() {
-      return Children.only(this.props.children);
+      return React.createElement(MetaContext.Provider, {
+        value: {
+          extract: this.props.extract
+        }
+      }, Children.only(this.props.children));
     }
   }]);
 
-  return MetaTagsContext;
+  return MetaContextProviderWrapper;
 }(Component);
-
-_defineProperty(MetaTagsContext, "childContextTypes", {
-  extract: propTypes.func
-});
 
 var uniqueIdentifiersI = ['property', 'name', 'itemprop'];
 /**
@@ -313,14 +141,12 @@ function getDuplicateTitle() {
 function getDuplicateCanonical() {
   return document.head.querySelectorAll('link[rel="canonical"]');
 }
+function getDuplicateElementById(_ref) {
+  var id = _ref.id;
+  return id && document.head.querySelector("#".concat(id));
+}
 function getDuplicateMeta(meta) {
-  var head = document.head;
-  var id = meta.id; //if has id and element with id is not present than return the element
-
-  if (id) {
-    return id && head.querySelector("#".concat(id));
-  } //for any other unique identifier check if metas already available with same identifier which doesn't have id
-
+  var head = document.head; //for any other unique identifier check if metas already available with same identifier which doesn't have id
 
   return uniqueIdentifiersI.reduce(function (duplicates, identifier) {
     var identifierValue = meta.getAttribute(identifier);
@@ -441,6 +267,10 @@ function (_Component) {
           if (tag === 'title') {
             var title = getDuplicateTitle();
             if (title) removeChild(head, title);
+          } else if (child.id) {
+            // if the element has id defined remove the existing element with that id
+            var elm = getDuplicateElementById(child);
+            if (elm) removeChild(head, elm);
           } else if (tag === 'meta') {
             var meta = getDuplicateMeta(child);
             if (meta) removeChild(head, meta);
@@ -463,9 +293,7 @@ function (_Component) {
   return MetaTags;
 }(Component);
 
-_defineProperty(MetaTags, "contextTypes", {
-  extract: propTypes.func
-});
+_defineProperty(MetaTags, "contextType", MetaContext);
 
 var ReactTitle =
 /*#__PURE__*/
@@ -488,9 +316,5 @@ function (_Component) {
   return ReactTitle;
 }(Component);
 
-_defineProperty(ReactTitle, "propTypes", {
-  title: propTypes.string
-});
-
 export default MetaTags;
-export { MetaTags, MetaTagsContext, ReactTitle };
+export { MetaTags, MetaContextProviderWrapper as MetaTagsContext, ReactTitle };
