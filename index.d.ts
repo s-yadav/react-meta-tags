@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface ExtractFunction {
   (elements: React.ReactElement | React.ReactElement[]): void;
 }
