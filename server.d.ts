@@ -1,3 +1,4 @@
+import React from 'react';
 import { ExtractFunction } from './index';
 
 export interface MetaTagsInstance {
